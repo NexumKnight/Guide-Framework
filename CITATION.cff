@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "GUIDE: Generalized Uncertainty Inference for Drag Exit-Times"
+abstract: >-
+  A closed-form, first-exit-time framework for low Earth orbit station-keeping
+  decisions under thermospheric density uncertainty. The fractional density
+  perturbation is modeled as an Ornstein-Uhlenbeck process; the resulting
+  semi-major axis error is a scalar Gaussian process whose first-exit time
+  through a control band has a closed-form cumulative distribution function,
+  replacing Monte Carlo screening for maneuver timing and delta-v budgeting.
+authors:
+  - family-names: "Vasudevan"
+    given-names: "Nijanthan"
+version: 0.1.0
+date-released: 2026-06-23
+license: MIT
+keywords:
+  - astrodynamics
+  - station-keeping
+  - first-exit-time
+  - ornstein-uhlenbeck
+  - thermospheric density
+  - uncertainty quantification

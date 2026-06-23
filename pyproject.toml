@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "guide-framework"
+version = "0.1.0"
+description = "Closed-form first-exit-time CDFs for LEO station-keeping under thermospheric density uncertainty"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+    { name = "Nijanthan Vasudevan" },
+]
+keywords = [
+    "astrodynamics",
+    "station-keeping",
+    "first-exit-time",
+    "ornstein-uhlenbeck",
+    "thermospheric-density",
+    "uncertainty-quantification",
+    "low-earth-orbit",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Physics",
+]
+dependencies = [
+    "numpy>=1.23",
+    "scipy>=1.10",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=7.0"]
+
+[project.urls]
+Homepage = "https://github.com/NexumKnight/guide-framework"
+Repository = "https://github.com/NexumKnight/guide-framework"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
