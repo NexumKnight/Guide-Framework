@@ -83,6 +83,35 @@ Two runnable scripts are in `examples/`:
 - `examples/gannon_kanopus.py`: a Gannon-storm screening for a KANOPUS-V class
   satellite, with a Monte Carlo cross-check that confirms the closed form is a
   conservative bound on exit probability.
+- `examples/rope_to_guide.py`: calibrating the OU driver from a ROPE forecast
+  (runs on a synthetic stand-in; the real ROPE wiring is documented inline).
+
+## ROPE integration
+
+GUIDE's density inputs (`rho_nom`, `gamma`, `tau`) can be calibrated from ROPE
+(https://github.com/anirudh53/ROPE_META), the lab's reduced-order probabilistic
+density emulator. ROPE returns a mean density field and an Unscented-Transform
+uncertainty, both `(H, 72, 36, 45)` over local solar time, latitude, and
+altitude, in kg/m^3, and ships a `DensityInterpolator` that samples them along a
+satellite track as `{density, sigma}`.
+
+`guide.drivers.rope_adapter` turns that along-track series into a `DensityDriver`:
+
+- `gamma` is the stationary fractional 1-sigma, from `sigma_rho / rho_nom`.
+- `rho_nom` is a representative nominal density collapsed from the track.
+- `tau` is the correlation time. ROPE's `density_std` is an instantaneous
+  spread and does not by itself determine `tau`; the adapter estimates `tau`
+  from a realized error path (the residual against accelerometer truth, or the
+  ROPE ensemble-member deviations), and falls back to the nominal 3600 s with a
+  warning if none is supplied. Calibrating `tau`, and promoting it to a
+  time-varying `tau(t)` for storms, is the time-inhomogeneous OU extension.
+
+GUIDE does not import ROPE, TensorFlow, or PyTorch: the adapter operates on the
+plain NumPy series you extract from a ROPE run, so GUIDE stays installable
+without ROPE's stack. Note that running ROPE itself requires its downloaded
+model weights (hosted on Google Drive, placed under `ROPE_META/Models/`); the
+drivers go back to 1957, so Halloween 2003, St Patrick's 2015, and Gannon 2024
+are all in range.
 
 ## Package layout
 
@@ -96,6 +125,8 @@ src/guide/
   conservatism.py    conservatism diagnostics and manuscript hooks
   config.py          Spacecraft, DensityDriver, ControlBand, GuideProblem
   stationkeeping.py  decide(): the operational decision layer
+  drivers/
+    rope_adapter.py  calibrate a DensityDriver from ROPE along-track output
 docs/
   theory.md          derivations behind every module
   architecture.md    the ROPE -> DOPE -> GUIDE pipeline in detail
